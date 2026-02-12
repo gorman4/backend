@@ -1,6 +1,11 @@
 const mongoose = require("mongoose")
 
 const InventorySchema = new mongoose.Schema({
+    uuid: {
+        type: String,
+        required: true
+    },
+
     itemname: {
         type: String,
         required: true
@@ -10,17 +15,26 @@ const InventorySchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    tracknumber: {
+        type: String,
+        required: true
+
+    },
     origin: String,
     destination: String,
     currentposition: String,
     location: {
+        name: {
+            type: String,
+            required: true
+        },
         long: {
             type: Number,
-            required: true
+            required: false
         },
         lat: {
             type: Number,
-            required: true
+            required: false
         }
     }
 }, {
