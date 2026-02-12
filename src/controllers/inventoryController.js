@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require("uuid")
 const Inventory = require("../models/inventory")
 const getCoordinates = require("../services/getCoordinates")
 const generateTrackNo = require("../lib/generateTrackNo")
+const inventory = require("../models/inventory")
 
 const insertInventory = async(req, res) => {
     try {
@@ -40,6 +41,7 @@ const insertInventory = async(req, res) => {
 
         // write to database
         const inventory = await Inventory.create({
+            user: req.user._id,
             uuid: uniqueID,
             itemname: item_name,
             quantity,
@@ -107,9 +109,35 @@ const TrackInventory = async(req, res) => {
 
 }
 
+const getUserInventories = async(req, res) => {
+    try {
+
+        //get logged in user id from middle
+        const userId = req.user._id
+        const inventories = await inventory.find({ user: userId })
+
+        res.status(200).json({
+            success: true,
+            count: inventories.length,
+            data: inventories
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server Error",
+            error: error.message
+        })
+
+    }
+
+
+}
+
 
 
 module.exports = {
     insertInventory,
-    TrackInventory
+    TrackInventory,
+    getUserInventories
 }
