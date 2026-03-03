@@ -37,7 +37,12 @@ const InventorySchema = new mongoose.Schema({
             type: Number,
             required: false
         }
-    }
+    },
+    status: {
+        type: String,
+        require: true
+
+    },
 }, {
     timestamps: true
 })

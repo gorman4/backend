@@ -13,7 +13,8 @@ const insertInventory = async(req, res) => {
             origin,
             destination,
             current_position,
-            location
+            location,
+            status
 
         } = req.body
 
@@ -54,11 +55,13 @@ const insertInventory = async(req, res) => {
                 long: lon,
                 lat: lat,
             },
+            status
         })
 
 
 
         return res.status(201).json({
+            "success": true,
             inventory,
             message: "Inventory insert successfully"
         })
