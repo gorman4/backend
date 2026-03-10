@@ -14,7 +14,17 @@ const insertInventory = async(req, res) => {
             destination,
             current_position,
             location,
-            status
+            status,
+            receiver_name,
+            receiver_address,
+            receiver_email,
+            receiver_phone,
+            weight,
+            service,
+            delivery_mode,
+            completion,
+            expected_delivery,
+            item_image
 
         } = req.body
 
@@ -23,7 +33,17 @@ const insertInventory = async(req, res) => {
             !origin ||
             !destination ||
             !current_position ||
-            !location.name
+            !location.name ||
+            !receiver_name ||
+            !receiver_address ||
+            !receiver_email ||
+            !receiver_phone ||
+            !weight ||
+            !service ||
+            !delivery_mode ||
+            !completion ||
+            !expected_delivery ||
+            !item_image
         ) {
             return res.status(400).json({
                 message: "Please enter all values"
@@ -44,6 +64,16 @@ const insertInventory = async(req, res) => {
         const inventory = await Inventory.create({
             user: req.user._id,
             uuid: uniqueID,
+            receivername: receiver_name,
+            receiveraddress: receiver_address,
+            receiveremail: receiver_email,
+            receiverphone: receiver_phone,
+            weight,
+            service,
+            deliverymode: delivery_mode,
+            completion,
+            expecteddelivery: expected_delivery,
+            itemimage: item_image,
             itemname: item_name,
             quantity,
             tracknumber: trackNo,
@@ -91,7 +121,7 @@ const TrackInventory = async(req, res) => {
         if (!inventory) {
 
             return res.status(401).json({
-                message: "Invalid INventory"
+                message: "Invalid Tracking Number"
             })
         }
 
@@ -137,10 +167,46 @@ const getUserInventories = async(req, res) => {
 
 }
 
+const activateInventory = async(req, res) => {
+    //Get the present status and reverse it
+    try {
+        const { uuid } = req.query;
+
+        if (!uuid) {
+            return res.status(400).json({
+                success: false,
+                message: "UUID is required"
+            })
+        }
+
+        const updatedInventory = await Inventory.findOneAndUpdate({ uuid: uuid }, { status: "Active" }, { new: true });
+        if (!updatedInventory) {
+            return res.status(404).json({
+                success: false,
+                message: "Inventory not found"
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            data: updatedInventory
+
+        });
+
+    } catch (error) {
+        console.error("Activation error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        })
+    }
+
+}
+
 
 
 module.exports = {
     insertInventory,
     TrackInventory,
-    getUserInventories
+    getUserInventories,
+    activateInventory
 }
