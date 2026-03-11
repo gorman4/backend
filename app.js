@@ -7,6 +7,8 @@ const connectDB = require("./src/config/DB");
 const authRoute = require("./src/routes/authRoute")
 const quoteRoute = require("./src/routes/quoteRoute")
 const inventoryRoute = require("./src/routes/inventoryRoute");
+const cronRoute = require("./src/routes/cronRoute")
+
 
 connectDB(); // make database connect
 
@@ -28,10 +30,16 @@ app.use(cors({
 
 
 
+
+app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
+
+
+
 //Routes
 app.use("/api/v1", authRoute)
 app.use("/api/v1", quoteRoute)
 app.use("/api/v1", inventoryRoute)
+app.use("/api/v1", cronRoute)
 
 
 

@@ -71,6 +71,16 @@ const InventorySchema = new mongoose.Schema({
             type: Number,
             required: false,
         },
+        isMoving: {
+            type: Boolean,
+            default: false,
+            required: false,
+        },
+        direction: {
+            type: String,
+            enum: ["north", "south", "east", "west"],
+            required: false,
+        },
     },
     status: {
         type: String,
