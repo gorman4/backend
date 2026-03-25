@@ -1,7 +1,7 @@
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
-const fs = require("fs")
+// const fs = require("fs")
 const express = require("express");
 const connectDB = require("./src/config/DB");
 const authRoute = require("./src/routes/authRoute")
@@ -39,7 +39,7 @@ app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/v1", authRoute)
 app.use("/api/v1", quoteRoute)
 app.use("/api/v1", inventoryRoute)
-app.use("/api/v1", cronRoute)
+    // app.use("/api/v1", cronRoute)
 
 
 
