@@ -1,7 +1,7 @@
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
-// const fs = require("fs")
+const fs = require('fs');
 const express = require("express");
 const connectDB = require("./src/config/DB");
 const authRoute = require("./src/routes/authRoute")
@@ -28,7 +28,14 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+const uploadDir = path.join(__dirname, 'src', 'uploads');
 
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('Uploads directory created');
+} else {
+    console.log('Uploads directory already exists');
+}
 
 
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
