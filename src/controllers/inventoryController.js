@@ -246,10 +246,35 @@ const updateLocation = async(req, res) => {
     }
 };
 
+
+const deleteInventory = async(req, res) => {
+    try {
+        const { uuid } = req.params;
+
+        if (!uuid) {
+            return res.status(400).json({ message: "UUID is required" });
+        }
+
+        // Example (adjust based on your DB)
+        const deletedItem = await Inventory.findOneAndDelete({ uuid });
+
+        if (!deletedItem) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
+        res.status(200).json({ message: "Deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+
 module.exports = {
     insertInventory,
     TrackInventory,
     getUserInventories,
     activateInventory,
-    updateLocation
+    updateLocation,
+    deleteInventory
+
 };
